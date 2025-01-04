@@ -23,7 +23,7 @@ import java.util.Date;
 class DateUtils {
         public static String getStartDate() {
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DATE, -21);
+            calendar.add(Calendar.DATE, -60);
             Date date = calendar.getTime();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             return "'" + dateFormat.format(date) + "'";
@@ -52,30 +52,48 @@ class DateUtils {
         FSUMOUTQTY 累计出库数量
         * */
 
-            String jsonData = "{\"FormId\":\"SAL_DELIVERYNOTICE\",\"FieldKeys\":\"FBILLNO,FCREATEDATE,FDOCUMENTSTATUS,FQTY,FSUMOUTQTY\",\"FilterString\":\"FCREATEDATE between \" +  startDate  + \" and \" + endDate + \" and FDOCUMENTSTATUS = 'C' and FQTY <> FSUMOUTQTY\",\"OrderString\":\"\",\"TopRowCount\":0,\"StartRow\":0,\"Limit\":2000,\"SubSystemId\":\"\"}";
+            //定义接口参数 jsonData
+            String FormId = "SAL_DELIVERYNOTICE";
+            String FieldKeys = "FBILLNO,FCREATEDATE,FDOCUMENTSTATUS,FQTY,FSUMOUTQTY";
+            String FilterString = "FCREATEDATE between " +  startDate  + " and " + endDate + " and FDOCUMENTSTATUS = 'C' and FQTY <> FSUMOUTQTY";
+            String OrderString = "";
+            int TopRowCount = 0;
+            int StartRow = 0;
+            int EndRow = 0;
+            int Limit = 2000;
+            String SubSystemId = "";
+            // 构造jsonData
+            String jsonData = "{\"FormId\":\"" + FormId + "\"," +
+                    "\"FieldKeys\":\"" + FieldKeys + "\"," +
+                    "\"FilterString\":\"" + FilterString + "\"," +
+                    "\"OrderString\":\"" + OrderString + "\"," +
+                    "\"TopRowCount\":" + TopRowCount + "," +
+                    "\"StartRow\":" + StartRow + "," +
+                    "\"EndRow\":" + EndRow + "," +
+                    "\"Limit\":" + Limit + "," +
+                    "\"SubSystemId\":\"" + SubSystemId + "\"}";
             System.out.println("接口发送数据: " + jsonData);
             try {
                 // 调用接口
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 String resultJson = gson.toJson(client.executeBillQuery(jsonData));
                 System.out.println("接口返回结果: " + resultJson);
-                // 处理返回结果
-                resultJson = resultJson.replaceAll("\"", "");
-                System.out.println("处理后的数据: " + resultJson);
                 JsonParser parser = new JsonParser();
+                // 解析JSON
                 JsonElement jsonElement = parser.parse(resultJson);
                 JsonArray jsonArray = jsonElement.getAsJsonArray();
                 List<String[]> data = new ArrayList<>();
-
+                // 遍历JSON数组 并将数据添加到List中
                 for (JsonElement element : jsonArray) {
                     JsonArray innerArray = element.getAsJsonArray();
-                    String[] row = new String[5];
-                    row[0] = innerArray.get(0).getAsString(); // 获取第一个元素
-                    row[1] = innerArray.get(1).getAsString(); // 获取第二个元素
-                    row[2] = innerArray.get(2).getAsString();
-                    row[3] = innerArray.get(3).getAsString();
+                    int arraySize = innerArray.size();
+                    String[] row = new String[arraySize];
+                    for (int i = 0; i < arraySize; i++) {
+                        row[i] = innerArray.get(i).getAsString();
+                    }
                     data.add(row);
                 }
+
                 String newResultJson = new Gson().toJson(data);
                 System.out.println("生成图片的数据: " + newResultJson);
 
@@ -86,7 +104,7 @@ class DateUtils {
 
             } catch (Exception e) {
                 LOGGER.severe(e.getMessage());
-                fail(e.getMessage());
+
             }
         }
 
@@ -97,7 +115,12 @@ class DateUtils {
             int rowHeight = 30;
 
             // 图片高度比数据总行数高 10% 的高度
-            int height = (int) (data.size() * 1.5 * rowHeight);
+            int height;
+            if (data.size() == 0) {
+                height = 100;
+            } else {
+                height = (int) (data.size() * 1.5 * rowHeight);
+            }
 
 
 
