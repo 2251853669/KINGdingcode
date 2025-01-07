@@ -6,20 +6,18 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class DingTalkNotification {
+    private static final String WEBHOOK_URL = "https://oapi.dingtalk.com/robot/send?access_token=c4de998d88fcec1c249c6712693278f293a30359620371dbd9ba30b97a8cd4ca";  // 请替换为你的Webhook URL
 
-    private static final String WEBHOOK_URL = "https://oapi.dingtalk.com/robot/send?access_token=c4de998d88fcec1c249c6712693278f293a30359620371dbd9ba30b97a8cd4ca"; // 请替换为你的Webhook URL
-
-    public static void main(String[] args) {
-        String urlString = "https://api.xinyew.cn/api/360tc";
-        String filePath = "D:\\Senddingcode\\KINGdingcode\\table.png";
+    public static void sendDingTalkNotification(String urlString, String filePath) {
         String newurl = post.uploadFileAndGetUrl(urlString, filePath);
         if (newurl != null) {
             System.out.println("URL: " + newurl);
         } else {
             System.out.println("Failed to upload file and get URL.");
+            return;
         }
         // 替换为实际的图片URL,实际url为post类输出的newurl
-        String imageUrl = newurl ;
+        String imageUrl = newurl;
         String message = createMessage(imageUrl);
         sendNotification(message);
     }

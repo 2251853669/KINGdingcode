@@ -93,6 +93,11 @@ public class GETSAL {
             System.out.println("生成图片的路径: " + new File(".").getAbsolutePath() + File.separator + "table.png");
 
 
+                String urlString = "https://api.xinyew.cn/api/360tc";
+                String filePath = "D:\\Senddingcode\\KINGdingcode\\table.png";
+
+                DingTalkNotification.sendDingTalkNotification(urlString, filePath);
+
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
 
