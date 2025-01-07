@@ -1,8 +1,9 @@
 package com.kingdee.webapi.javasdk.dingding;
-
+//从金蝶获取销售订单数据对比发货数量和实际发货数量生成图片，并发送钉钉
 import com.google.gson.*;
 import com.kingdee.bos.webapi.sdk.K3CloudApi;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -87,7 +88,12 @@ public class test {
                 data.add(row);
             }
             TableToImage.createTableImage(data, "table.png");
-        } catch (Exception e) {
+            //输出文件路径
+
+            System.out.println("生成图片的路径: " + new File(".").getAbsolutePath() + File.separator + "table.png");
+
+
+                    } catch (Exception e) {
             LOGGER.severe(e.getMessage());
 
         }
