@@ -1,5 +1,18 @@
 package com.kingdee.webapi.javasdk.dingding;
 
+import com.google.gson.*;
+import com.kingdee.bos.webapi.sdk.K3CloudApi;
+import com.kingdee.webapi.javasdk.dingding.TableToImage;
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -19,6 +32,7 @@ import static org.junit.Assert.fail;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
 
 class DateUtils1 {
     public static String getStartDate() {
@@ -93,12 +107,12 @@ public class test {
                 }
                 data.add(row);
             }
-
+            TableToImage.createTableImage(data, "table.png");
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
 
         }
     }
 
-
+   
 }
