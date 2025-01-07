@@ -49,11 +49,11 @@ public class post {
                 }
                 in.close();
 
-                // Parse JSON and extract URL
+
                 JSONObject jsonResponse = new JSONObject(response.toString());
                 return jsonResponse.getJSONObject("data").getString("url");
             } else {
-                System.out.println("POST request not successful.");
+                System.out.println("请求失败");
             }
         } catch (IOException e) {
             e.printStackTrace();

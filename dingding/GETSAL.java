@@ -1,24 +1,18 @@
 package com.kingdee.webapi.javasdk.dingding;
-
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
+//从金蝶获取销售订单数据对比发货数量和实际发货数量生成图片，并发送钉钉
 import com.google.gson.*;
 import com.kingdee.bos.webapi.sdk.K3CloudApi;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import java.util.UUID;
-import static org.junit.Assert.fail;
-import java.text.SimpleDateFormat;
+
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
+import java.util.logging.Logger;
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 class DateUtils {
     public static String getStartDate() {
@@ -93,14 +87,11 @@ public class GETSAL {
                 }
                 data.add(row);
             }
+            TableToImage.createTableImage(data, "table.png");
+            //输出文件路径
 
-            String newResultJson = new Gson().toJson(data);
-            System.out.println("生成图片的数据: " + newResultJson);
+            System.out.println("生成图片的路径: " + new File(".").getAbsolutePath() + File.separator + "table.png");
 
-            // 生成图片
-            createImage(data, "output.png");
-            //输出图片全路径
-            System.out.println("生成图片的路径: " + new File(".").getAbsolutePath() + File.separator + "output.png");
 
         } catch (Exception e) {
             LOGGER.severe(e.getMessage());
@@ -108,53 +99,5 @@ public class GETSAL {
         }
     }
 
-    public static void createImage(List<String[]> data, String filePath) {
-        // 自适应宽度
-        int width = 1000;
-        // 每行高度自适应根据字体自动变化
-        int rowHeight = 30;
 
-        // 图片高度比数据总行数高 10% 的高度
-        int height;
-        if (data.size() == 0) {
-            height = 100;
-        } else {
-            height = (int) (data.size() * 1.5 * rowHeight);
-        }
-
-
-
-        // 创建一个空白的BufferedImage对象
-        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d = bufferedImage.createGraphics();
-        // 设置背景色
-        g2d.setColor(Color.WHITE);
-        g2d.fillRect(0, 0, width, height);
-
-        // 设置字体和颜色
-        g2d.setFont(new Font("宋体", Font.PLAIN, 20));
-        g2d.setColor(Color.BLACK);
-
-
-        // 绘制表头
-        String header = "编号 | 创建时间 | 状态 | 销售数 | 已发数";
-        g2d.drawString(header, 10, 20); // 表头的y坐标为20
-        // 绘制每一行数据
-        int y = 40; // 初始y坐标
-        for (String[] row : data) {
-            String text = row[0] + " | " + row[1] + " | " + row[2] + " | " + row[3];
-            g2d.drawString(text, 10, y);
-            y += rowHeight;
-        }
-
-        // 释放资源
-        g2d.dispose();
-
-        // 将BufferedImage写入文件
-        try {
-            ImageIO.write(bufferedImage, "png", new File(filePath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
