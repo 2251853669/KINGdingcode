@@ -40,7 +40,7 @@ public class TableToImage {
         g2d.setPaint(Color.BLACK);
 
         // 定义表头
-        String[] headers = {"FBILLNO", "FCREATEDATE", "FDOCUMENTSTATUS", "FQTY", "FSUMOUTQTY"};
+        String[] headers = {"单据号", "创建日期", "单据状态", "销售数量", "累计出库数量"};
         int cellWidth = width / headers.length;
         int cellHeight = 30; // 每行高度固定为30像素
 
