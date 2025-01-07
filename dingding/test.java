@@ -1,5 +1,5 @@
 package com.kingdee.webapi.javasdk.dingding;
-//从金蝶获取销售订单数据对比发货数量和实际发货数量生成图片，并发送钉钉
+//从金蝶获取销售订单数据对比发货数量和实际发货数量生成图片，并发送钉钉(测试用）
 import com.google.gson.*;
 import com.kingdee.bos.webapi.sdk.K3CloudApi;
 
