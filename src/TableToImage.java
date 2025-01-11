@@ -1,4 +1,4 @@
-package com.kingdee.webapi.javasdk.dingding;
+package com.kingdee.webapi.javasdk.src;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
